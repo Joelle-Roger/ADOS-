@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ADOS Screening Tool</title>
+
+    <style>
+        *{
+            box-sizing: border-box;
+        }
+        body {
+        font-family: Arial, sans-serif;
+        background: #eef3f9;
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 30px 0;
+        }
+
+        .card {
+            background: white;
+            width: 900px;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            color: #1f3b64;
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .header p {
+            margin: 5px 0 0 0;
+            font-size: 13px;
+            color: #5c6f86;
+        }
+
+        /* ===== SECTIONS ===== */
+        .section {
+            margin-bottom: 25px;
+        }
+
+        /* ===== AGE & GENDER ===== */
+        .info-grid {
+            display: flex;
+            gap: 40px;
+        }
+
+        .info-card {
+            flex: 1;
+            background: #f4f8ff;
+            border: 1px solid #d7e6ff;
+            border-radius: 12px;
+            padding: 15px;
+        }
+
+        .info-title {
+            font-size: 12px;
+            color: #1f3b64;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #c9dbf5;
+            font-size: 14px;
+            outline: none;
+            display:block;
+        }
+
+        input:focus, select:focus {
+            border-color: #4a7bd1;
+        }
+
+        /* ===== QUESTIONS ===== */
+        .questions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .q {
+            background: #f4f8ff;
+            border: 1px solid #d7e6ff;
+            border-radius: 12px;
+            padding: 12px;
+        }
+
+        .q-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: #1f3b64;
+            margin-bottom: 4px;
+        }
+
+        .q-hint {
+            font-size: 11px;
+            color: #5c6f86;
+            margin-bottom: 8px;
+        }
+
+        /* ===== BUTTON ===== */
+        button {
+            width: 240px;
+            padding: 12px;
+            border: none;
+            background: #1f3b64;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto 0 auto;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background: #163052;
+        }
+
+        /* ===== RESULT ===== */
+        .result {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #1f3b64;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <!-- HEADER -->
+    <div class="header">
+        <h1>ADOS Screening Questionnaire</h1>
+        <p>For Egyptian Children</p>
+    </div>
+
+    <form action="/predict" method="POST">
+
+        <!-- AGE & GENDER -->
+        <div class="section info-grid">
+
+            <div class="info-card">
+                <div class="info-title">Age</div>
+                <input name="Age" placeholder="Enter age" required>
+            </div>
+
+            <div class="info-card">
+                <div class="info-title">Gender</div>
+                <select name="Gender" required>
+                    <option value="1">Male</option>
+                    <option value="0">Female</option>
+                </select>
+            </div>
+
+        </div>
+
+        <!-- QUESTIONS -->
+        <div class="section">
+
+            <div class="questions">
+
+                {% for i in range(1,14) %}
+                <div class="q">
+                    <div class="q-title">Q{{i}}</div>
+
+                    <div class="q-hint">
+                        {% if i == 1 %}Eye contact{% endif %}
+                        {% if i == 2 %}Responds to name{% endif %}
+                        {% if i == 3 %}Social interest{% endif %}
+                        {% if i == 4 %}Shared attention{% endif %}
+                        {% if i == 5 %}Repetitive behavior{% endif %}
+                        {% if i == 6 %}Speech delay{% endif %}
+                        {% if i == 7 %}Emotion understanding{% endif %}
+                        {% if i == 8 %}Play behavior{% endif %}
+                        {% if i == 9 %}Communication issues{% endif %}
+                        {% if i == 10 %}Social avoidance{% endif %}
+                        {% if i == 11 %}Sensory reaction{% endif %}
+                        {% if i == 12 %}Change difficulty{% endif %}
+                        {% if i == 13 %}Social awareness{% endif %}
+                    </div>
+
+                    <select name="Q{{i}}">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+
+        <button type="submit">Predict</button>
+    </form>
+
+    {% if prediction %}
+    <div class="result">
+        {{ prediction }}
+    </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
